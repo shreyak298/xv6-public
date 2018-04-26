@@ -13,10 +13,10 @@ sys_fork(void)
   return fork();
 }
 
-int
-sys_exit(void)
+
+void exit(int status)
 {
-  exit();
+  exit(0);
   return 0;  // not reached
 }
 
