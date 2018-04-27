@@ -25,7 +25,7 @@ forktest(void)
     if(pid < 0)
       break;
     if(pid == 0)
-      exit(1);
+      exit(0);
   }
 
   if(n == N){
