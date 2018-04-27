@@ -19,6 +19,7 @@ int main(int argc, char *argv[])
   
     // End of test
 	 exit(0);
+         return(0);
  }
   
   
@@ -93,5 +94,4 @@ int waitPid(void){
       ret_pid = waitpid(pid_a[4], &exit_status, 0);
       printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
       
-      return 0;
-  }
+      return 
