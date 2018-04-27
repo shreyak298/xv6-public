@@ -169,6 +169,7 @@ main(void)
     wait(0);
   }
   exit(0);
+  return(0);
 }
 
 void
