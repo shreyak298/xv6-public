@@ -346,7 +346,7 @@ pipe1(void)
       exit(1);
     }
     close(fds[0]);
-    wait();
+    wait(0);
   } else {
     printf(1, "fork() failed\n");
     exit(1);
@@ -883,7 +883,7 @@ linkunlink()
   if(pid)
     wait(0);
   else
-    exit(1);
+    exit(0);
 
   printf(1, "linkunlink ok\n");
 }
@@ -1026,68 +1026,68 @@ subdir(void)
 
   if(open("dd/dd/ff", O_RDONLY) >= 0){
     printf(1, "open (unlinked) dd/dd/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
 
   if(open("dd/ff/ff", O_CREATE|O_RDWR) >= 0){
     printf(1, "create dd/ff/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(open("dd/xx/ff", O_CREATE|O_RDWR) >= 0){
     printf(1, "create dd/xx/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(open("dd", O_CREATE) >= 0){
     printf(1, "create dd succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(open("dd", O_RDWR) >= 0){
     printf(1, "open dd rdwr succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(open("dd", O_WRONLY) >= 0){
     printf(1, "open dd wronly succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(link("dd/ff/ff", "dd/dd/xx") == 0){
     printf(1, "link dd/ff/ff dd/dd/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(link("dd/xx/ff", "dd/dd/xx") == 0){
     printf(1, "link dd/xx/ff dd/dd/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(link("dd/ff", "dd/dd/ffff") == 0){
     printf(1, "link dd/ff dd/dd/ffff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(mkdir("dd/ff/ff") == 0){
     printf(1, "mkdir dd/ff/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(mkdir("dd/xx/ff") == 0){
     printf(1, "mkdir dd/xx/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(mkdir("dd/dd/ffff") == 0){
     printf(1, "mkdir dd/dd/ffff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dd/xx/ff") == 0){
     printf(1, "unlink dd/xx/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dd/ff/ff") == 0){
     printf(1, "unlink dd/ff/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(chdir("dd/ff") == 0){
     printf(1, "chdir dd/ff succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(chdir("dd/xx") == 0){
     printf(1, "chdir dd/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
 
   if(unlink("dd/dd/ffff") != 0){
@@ -1100,7 +1100,7 @@ subdir(void)
   }
   if(unlink("dd") == 0){
     printf(1, "unlink non-empty dd succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dd/dd") < 0){
     printf(1, "unlink dd/dd failed\n");
@@ -1134,7 +1134,7 @@ bigwrite(void)
       int cc = write(fd, buf, sz);
       if(cc != sz){
         printf(1, "write(%d) ret %d\n", sz, cc);
-        exit(1);
+        exit(0);
       }
     }
     close(fd);
@@ -1231,11 +1231,11 @@ fourteen(void)
 
   if(mkdir("12345678901234/12345678901234") == 0){
     printf(1, "mkdir 12345678901234/12345678901234 succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(mkdir("123456789012345/12345678901234") == 0){
     printf(1, "mkdir 12345678901234/123456789012345 succeeded!\n");
-    exit(1);
+    exit(0);
   }
 
   printf(1, "fourteen ok\n");
@@ -1255,11 +1255,11 @@ rmdot(void)
   }
   if(unlink(".") == 0){
     printf(1, "rm . worked!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("..") == 0){
     printf(1, "rm .. worked!\n");
-    exit(1);
+    exit(0);
   }
   if(chdir("/") != 0){
     printf(1, "chdir / failed\n");
@@ -1267,11 +1267,11 @@ rmdot(void)
   }
   if(unlink("dots/.") == 0){
     printf(1, "unlink dots/. worked!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dots/..") == 0){
     printf(1, "unlink dots/.. worked!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dots") != 0){
     printf(1, "unlink dots failed!\n");
@@ -1295,29 +1295,29 @@ dirfile(void)
   close(fd);
   if(chdir("dirfile") == 0){
     printf(1, "chdir dirfile succeeded!\n");
-    exit(1);
+    exit(0);
   }
   fd = open("dirfile/xx", 0);
   if(fd >= 0){
     printf(1, "create dirfile/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   fd = open("dirfile/xx", O_CREATE);
   if(fd >= 0){
     printf(1, "create dirfile/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(mkdir("dirfile/xx") == 0){
     printf(1, "mkdir dirfile/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dirfile/xx") == 0){
     printf(1, "unlink dirfile/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(link("README", "dirfile/xx") == 0){
     printf(1, "link to dirfile/xx succeeded!\n");
-    exit(1);
+    exit(0);
   }
   if(unlink("dirfile") != 0){
     printf(1, "unlink dirfile failed!\n");
@@ -1327,12 +1327,12 @@ dirfile(void)
   fd = open(".", O_RDWR);
   if(fd >= 0){
     printf(1, "open . for writing succeeded!\n");
-    exit(1);
+    exit(0);
   }
   fd = open(".", 0);
   if(write(fd, "x", 1) > 0){
     printf(1, "write . succeeded!\n");
-    exit(1);
+    exit(0);
   }
   close(fd);
 
@@ -1388,12 +1388,12 @@ forktest(void)
     if(pid < 0)
       break;
     if(pid == 0)
-      exit(1);
+      exit(0);
   }
 
   if(n == 1000){
     printf(1, "fork claimed to work 1000 times!\n");
-    exit(1);
+    exit(0);
   }
 
   for(; n > 0; n--){
@@ -1445,7 +1445,7 @@ sbrktest(void)
     exit(1);
   }
   if(pid == 0)
-    exit(1);
+    exit(0);
   wait(0);
 
   // can one grow address space to something big?
@@ -1572,7 +1572,7 @@ validatetest(void)
     if((pid = fork()) == 0){
       // try to crash the kernel by passing in a badly placed integer
       validateint((int*)p);
-      exit(1);
+      exit(0);
     }
     sleep(0);
     sleep(0);
@@ -1627,7 +1627,7 @@ bigargtest(void)
     printf(stdout, "bigarg test ok\n");
     fd = open("bigarg-ok", O_CREATE);
     close(fd);
-    exit(1);
+    exit(0);
   } else if(pid < 0){
     printf(stdout, "bigargtest: fork failed\n");
     exit(1);
@@ -1715,7 +1715,7 @@ uio()
     port = RTC_DATA;
     asm volatile("inb %1,%0" : "=a" (val) : "d" (port));
     printf(1, "uio: uio succeeded; test FAILED\n");
-    exit(1);
+    exit(0);
   } else if(pid < 0){
     printf (1, "fork failed\n");
     exit(1);
