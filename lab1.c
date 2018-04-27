@@ -18,14 +18,8 @@ int main(int argc, char *argv[]) {
         printf(1, "\ntype \"lab1 1\" to test exit and wait, \"lab1 2\" to test waitpid \n");
   
     // End of test
-<<<<<<< HEAD
-	 exit(0);
-         return(0);
- }
-=======
     exit(0);
 }
->>>>>>> eea18abcfce3cc48ce4eead4c1247e7ad5e40508
   
   
 int exitWait(void) {
@@ -73,30 +67,6 @@ int waitPid(void){
         }
     }
        
-<<<<<<< HEAD
-      sleep(5);
-      printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[3]);
-      ret_pid = waitpid(pid_a[3], &exit_status, 0);
-      printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
-      sleep(5);
-      printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[1]);
-      ret_pid = waitpid(pid_a[1], &exit_status, 0);
-      printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
-      sleep(5);
-      printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[2]);
-      ret_pid = waitpid(pid_a[2], &exit_status, 0);
-      printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
-      sleep(5);
-      printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[0]);
-      ret_pid = waitpid(pid_a[0], &exit_status, 0);
-      printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
-      sleep(5);
-      printf(1, "\n This is the parent: Now waiting for child with PID# %d\n",pid_a[4]);
-      ret_pid = waitpid(pid_a[4], &exit_status, 0);
-      printf(1, "\n This is the partent: Child# %d has exited with status %d\n",ret_pid, exit_status);
-      
-      return 
-=======
     sleep(5);
     printf(1, " - This is the parent: Now waiting for child with PID# %d\n",pid_a[3]);
     ret_pid = waitpid(pid_a[3], &exit_status, 0);
@@ -119,4 +89,3 @@ int waitPid(void){
     printf(1, " - This is the parent: Child# %d has exited with status %d\n",ret_pid, exit_status);
     return 0;
 }
->>>>>>> eea18abcfce3cc48ce4eead4c1247e7ad5e40508
