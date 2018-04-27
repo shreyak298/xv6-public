@@ -65,7 +65,7 @@ runcmd(struct cmd *cmd)
   struct redircmd *rcmd;
 
   if(cmd == 0)
-    exit(1);
+    exit(0);
 
   switch(cmd->type){
   default:
@@ -74,7 +74,7 @@ runcmd(struct cmd *cmd)
   case EXEC:
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
-      exit(1);
+      exit(0);
     exec(ecmd->argv[0], ecmd->argv);
     printf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
@@ -176,7 +176,7 @@ void
 panic(char *s)
 {
   printf(2, "%s\n", s);
-  exit(0);
+  exit(1);
 }
 
 int
