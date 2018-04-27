@@ -64,7 +64,7 @@ exitiputtest(void)
       printf(stdout, "unlink ../iputdir failed\n");
       exit(1);
     }
-    exit(1);
+    exit(0);
   }
   wait(0);
   printf(stdout, "exitiput test ok\n");
@@ -102,7 +102,7 @@ openiputtest(void)
       printf(stdout, "open directory for write succeeded\n");
       exit(1);
     }
-    exit(1);
+    exit(0);
   }
   sleep(1);
   if(unlink("oidir") != 0){
@@ -324,7 +324,7 @@ pipe1(void)
         exit(1);
       }
     }
-    exit(1);
+    exit(0);
   } else if(pid > 0){
     close(fds[1]);
     total = 0;
@@ -418,7 +418,7 @@ exitwait(void)
         return;
       }
     } else {
-      exit(1);
+      exit(0);
     }
   }
   printf(1, "exitwait ok\n");
@@ -484,7 +484,7 @@ sharedfd(void)
     }
   }
   if(pid == 0)
-    exit();
+    exit(0);
   else
     wait(0);
   close(fd);
@@ -547,7 +547,7 @@ fourfiles(void)
           exit(1);
         }
       }
-      exit(1);
+      exit(0);
     }
   }
 
@@ -615,7 +615,7 @@ createdelete(void)
           }
         }
       }
-      exit(1);
+      exit(0);
     }
   }
 
@@ -631,7 +631,7 @@ createdelete(void)
       fd = open(name, 0);
       if((i == 0 || i >= N/2) && fd < 0){
         printf(1, "oops createdelete %s didn't exist\n", name);
-        exit();
+        exit(1);
       } else if((i >= 1 && i < N/2) && fd >= 0){
         printf(1, "oops createdelete %s did exist\n", name);
         exit(1);
@@ -787,12 +787,12 @@ concreate(void)
       fd = open(file, O_CREATE | O_RDWR);
       if(fd < 0){
         printf(1, "concreate create %s failed\n", file);
-        exit();
+        exit(1);
       }
       close(fd);
     }
     if(pid == 0)
-      exit(1);
+      exit(0);
     else
       wait(0);
   }
@@ -821,7 +821,7 @@ concreate(void)
 
   if(n != 40){
     printf(1, "concreate not enough files in directory listing\n");
-    exit(1);
+    exit(0);
   }
 
   for(i = 0; i < 40; i++){
@@ -844,7 +844,7 @@ concreate(void)
       unlink(file);
     }
     if(pid == 0)
-      exit(1);
+      exit(0);
     else
       wait(0);
   }
