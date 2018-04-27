@@ -228,10 +228,9 @@ void
 exit(int status)
 {
   struct proc *curproc = myproc();
+  curproc->exitStatus = status;
   struct proc *p;
   int fd;
-
-  curproc -> exitStatus = status;
 
   if(curproc == initproc)
     panic("init exiting");
@@ -289,7 +288,7 @@ wait(int *status)
       if(p->state == ZOMBIE){
         // Found one.
         pid = p->pid;
-       if (status != 0)
+	if (status != 0)
 	  *(status) = p->exitStatus;
         kfree(p->kstack);
         p->kstack = 0;
@@ -303,6 +302,7 @@ wait(int *status)
         return pid;
       }
     }
+
     // No point waiting if we don't have any children.
     if(!havekids || curproc->killed){
       release(&ptable.lock);
@@ -315,49 +315,48 @@ wait(int *status)
 }
 
 int
-waitpid(int pid, int *status, int options){
-   struct proc *p;
-   struct proc *curproc = myproc();
-   int procExists;
+waitpid(int pid, int* status, int options) 
+{
+  struct proc *p;
+  struct proc *curproc = myproc();
+  int procExists;
+  
+  acquire(&ptable.lock);
+  for(;;){
+    // Scan through table looking for exited children.
+    procExists = 0;
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->pid != pid)
+        continue;
+      procExists = 1;
 
-   acquire(&ptable.lock);
+      if (p->state == ZOMBIE) {
+        
 
-   for(;;){
- 	procExists = 0;
-	
-	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-	   if(p -> pid != pid){
-		continue;
-	   }
-	   procExists = 1;
+	  if (status != 0) 
+	    *(status) = p->exitStatus;
 
-	   if(p -> state == ZOMBIE){
-		if(status != 0){
-		   *(status) = p->exitStatus;
+        kfree(p->kstack);
+        p->kstack = 0;
+        freevm(p->pgdir);
+        p->pid = 0;
+        p->parent = 0;
+        p->name[0] = 0;
+        p->killed = 0;
+        p->state = UNUSED;
+        release(&ptable.lock);
+        return pid;
+      }
+    }
 
-	  	kfree(p->kstack);
-	  	p->kstack = 0;
-	  	freevm(p->pgdir);
-	        p->pid = 0;
-	   	p-> parent = 0;
-	        p->name[0] = 0;
-	        p->killed = 0;
-	        p->state = UNUSED;
-	        release(&ptable.lock);
-	        return pid;
-	   }
-	}
-
-	if(!procExists || curproc->killed){
-	   release(&ptable.lock);
-	   return -1;
-	}
-
-	sleep(curproc, &ptable.lock);
-   }
+    // No point waiting if we don't have any children.
+    if (!procExists || curproc->killed) {
+        release(&ptable.lock);
+        return -1;
+    }
+    sleep(curproc, &ptable.lock); 
+  }
 }
-
-	  	
 
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
