@@ -123,6 +123,8 @@ int 		wait(int *status);//cs 153
 int		waitpid(int pid, int *status, int options);//cs 153
 void            wakeup(void*);
 void            yield(void);
+int 		setpriority(int);
+int		setpriorityHelper(struct proc*, int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
