@@ -88,6 +88,10 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
+  p->priority = 10;         //Default priority to 10
+  acquire(&tickslock);
+  p->startTime = ticks;
+  release(&tickslock);
 
   release(&ptable.lock);
 
@@ -149,6 +153,10 @@ userinit(void)
   acquire(&ptable.lock);
 
   p->state = RUNNABLE;
+  p->priority = 10;         //Default priority to 10
+  acquire(&tickslock);
+  p->startTime = ticks;
+  release(&tickslock);
 
   release(&ptable.lock);
 }
@@ -215,6 +223,10 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
+  p->priority = 10;         //Default priority to 10
+  acquire(&tickslock);
+  p->startTime = ticks;
+  release(&tickslock);
 
   release(&ptable.lock);
 
@@ -229,6 +241,9 @@ exit(int status)
 {
   struct proc *curproc = myproc();
   curproc->exitStatus = status;
+  acquire(&tickslock);
+  cprintf("Turnaround time: %d\n", ticks - curproc->startTime);
+  release(&tickslock);
   struct proc *p;
   int fd;
 
@@ -301,6 +316,11 @@ wait(int *status)
         release(&ptable.lock);
         return pid;
       }
+      else {
+		if (curproc->priority < p-> priority) {
+			p->priority = curproc->priority;
+		}
+      }	
     }
 
     // No point waiting if we don't have any children.
@@ -315,7 +335,7 @@ wait(int *status)
 }
 
 int
-waitpid(int pid, int* status, int options) 
+waitpid(int pid, int* status, int options)//cs 153 
 {
   struct proc *p;
   struct proc *curproc = myproc();
@@ -347,6 +367,11 @@ waitpid(int pid, int* status, int options)
         release(&ptable.lock);
         return pid;
       }
+       else {
+	 if (curproc->priority < p->priority) {
+	   p->priority = curproc->priority;
+	 }
+       }
     }
 
     // No point waiting if we don't have any children.
@@ -369,7 +394,7 @@ waitpid(int pid, int* status, int options)
 void
 scheduler(void)
 {
-  struct proc *p;
+  struct proc *p, *i, *nextProcess;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -382,7 +407,17 @@ scheduler(void)
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
+	
+        nextProcess = p;
+          for(i = ptable.proc; i < &ptable.proc[NPROC]; i++) {
+              if (i->state != RUNNABLE)
+                  continue;
 
+              if (i->priority <= nextProcess->priority)
+                  nextProcess = i;
+          }
+          
+          p = nextProcess;
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
@@ -434,6 +469,10 @@ yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
+  myproc()->count += 1;
+  if (myproc()->count % 50 == 0) {
+    _setpriority(myproc(), myproc()->priority + 1);
+  }
   sched();
   release(&ptable.lock);
 }
@@ -578,4 +617,26 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+int
+_setpriority(struct proc* p, int priority) {
+    p->priority = priority;
+    
+    if (p->priority < 0) 
+        p->priority = 0;
+    if (p->priority > 31) 
+        p->priority = 31;
+
+    return p->priority;
+}
+
+int
+setpriority(int priority) {
+    struct proc *curproc = myproc();
+   
+    if (priority < 0)
+        return curproc->priority;
+
+    return _setpriority(curproc, priority);
 }
