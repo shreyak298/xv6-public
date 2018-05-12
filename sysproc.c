@@ -116,6 +116,7 @@ sys_uptime(void)
   return xticks;
 }
 
+//following is from cs153, lab2
 int 
 sys_setpriority(void){
 	int priority_value;	

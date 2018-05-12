@@ -104,7 +104,7 @@ extern int sys_wait(void);
 extern int sys_waitpid(void);//cs 153
 extern int sys_write(void);
 extern int sys_uptime(void);
-extern int sys_setpriority(void);
+extern int sys_setpriority(void); //cs153, lab2
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -129,7 +129,7 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_setpriority] sys_setpriority,
+[SYS_setpriority] sys_setpriority, // cs153 lab2
 };
 
 void

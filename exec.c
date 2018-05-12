@@ -99,7 +99,7 @@ exec(char *path, char **argv)
   curproc->sz = sz;
   curproc->tf->eip = elf.entry;  // main
   curproc->tf->esp = sp;
-  curproc->priority = 5;  //system process get higher default  priority
+  curproc->priority = 5;  //system process get higher default  priority, cs153 lab2
   switchuvm(curproc);
   freevm(oldpgdir);
   return 0;

@@ -223,7 +223,7 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
-  np->priority = 10;         //Default priority to 10
+  np->priority = 10;         //Default priority to 10, cs153 lab2
   acquire(&tickslock);
   np->startTime = ticks;
   release(&tickslock);
@@ -242,7 +242,7 @@ exit(int status)
   struct proc *curproc = myproc();
   curproc->exitStatus = status;
   acquire(&tickslock);
-  cprintf("Turnaround time: %d\n", ticks - curproc->startTime);
+  cprintf("Turnaround time: %d\n", ticks - curproc->startTime);	//Printing turnaround time, cs153 lab2
   release(&tickslock);
   struct proc *p;
   int fd;
@@ -317,7 +317,7 @@ wait(int *status)
         return pid;
       }
       else {
-		if (curproc->priority < p-> priority) {
+		if (curproc->priority < p-> priority) {		//Adjusts priority, manages priority inheritance , cs153 lab2
 			p->priority = curproc->priority;
 		}
       }	
@@ -368,7 +368,7 @@ waitpid(int pid, int* status, int options)//cs 153
         return pid;
       }
        else {
-	 if (curproc->priority < p->priority) {
+	 if (curproc->priority < p->priority) {		//Adjusts priority, manages priority inheritance, cs153 lab2
 	   p->priority = curproc->priority;
 	 }
        }
@@ -470,7 +470,7 @@ yield(void)
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
   myproc()->count += 1;
-  if (myproc()->count % 50 == 0) {
+  if (myproc()->count % 50 == 0) {				//handles priority aging, cs153 lab2
     setpriorityHelper(myproc(), myproc()->priority + 1);
   }
   sched();
@@ -618,6 +618,8 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+//next 2 functions are setpriority implementation, cs153 lab2
 
 int
 setpriorityHelper(struct proc* p, int priority) {
