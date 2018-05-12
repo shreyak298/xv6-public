@@ -21,4 +21,4 @@
 #define SYS_link   20
 #define SYS_mkdir  21
 #define SYS_close  22
-#define SYS_setpriority 23
+#define SYS_setpriority 23 // cs153 lab2
