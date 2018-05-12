@@ -223,9 +223,9 @@ fork(void)
   acquire(&ptable.lock);
 
   np->state = RUNNABLE;
-  p->priority = 10;         //Default priority to 10
+  np->priority = 10;         //Default priority to 10
   acquire(&tickslock);
-  p->startTime = ticks;
+  np->startTime = ticks;
   release(&tickslock);
 
   release(&ptable.lock);
@@ -471,7 +471,7 @@ yield(void)
   myproc()->state = RUNNABLE;
   myproc()->count += 1;
   if (myproc()->count % 50 == 0) {
-    _setpriority(myproc(), myproc()->priority + 1);
+    setpriorityHelper(myproc(), myproc()->priority + 1);
   }
   sched();
   release(&ptable.lock);
@@ -620,7 +620,7 @@ procdump(void)
 }
 
 int
-_setpriority(struct proc* p, int priority) {
+setpriorityHelper(struct proc* p, int priority) {
     p->priority = priority;
     
     if (p->priority < 0) 
@@ -638,5 +638,5 @@ setpriority(int priority) {
     if (priority < 0)
         return curproc->priority;
 
-    return _setpriority(curproc, priority);
+    return setpriorityHelper(curproc, priority);
 }
