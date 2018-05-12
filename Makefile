@@ -174,7 +174,7 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
-	_waitpidtest\
+	_waitpidtesting\
 	_lab1\
 	_lab2\
 	_lab2inherit\
